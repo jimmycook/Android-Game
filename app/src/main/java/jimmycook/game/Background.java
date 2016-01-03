@@ -4,17 +4,24 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 /**
- * Created by Jimmypq on 19/10/2015.
+ * Game Background
  */
 public class Background {
 
     private Bitmap image;
     private int x, y, dx;
 
+    /**
+     * Contructor
+     * @param res Bitmap background image
+     */
     public Background(Bitmap res){
         image = res;
     }
 
+    /**
+     * Updates the position of the background image by the vector (dx)
+     */
     public void update(){
         x+=dx;
         if(x< -GamePanel.WIDTH){
@@ -22,6 +29,10 @@ public class Background {
         }
     }
 
+    /**
+     * Draws the image to the canvas, will also draw the looping half of the background
+     * @param canvas Canvas
+     */
     public void draw(Canvas canvas){
         canvas.drawBitmap(image, x, y, null);
         if(x<0){
@@ -29,8 +40,11 @@ public class Background {
         }
     }
 
+    /**
+     * Sets the vector
+     * @param dx int  the new vector
+     */
     public void setVector(int dx){
         this.dx = dx;
-
     }
 }

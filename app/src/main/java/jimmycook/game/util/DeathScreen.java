@@ -1,24 +1,28 @@
-package jimmycook.game;
+package jimmycook.game.util;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import jimmycook.game.Game;
+import jimmycook.game.R;
 
-public class MainActivity extends ActionBarActivity {
+public class DeathScreen extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_death_screen);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_death_screen, menu);
         return true;
     }
 
@@ -35,5 +39,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void startGame(View view){
+        Intent intent = new Intent(this, Game.class);
+        startActivity(intent);
     }
 }

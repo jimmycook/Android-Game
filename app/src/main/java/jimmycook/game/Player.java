@@ -2,31 +2,32 @@ package jimmycook.game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.util.Log;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by Jimmypq on 22/10/2015.
+ * Player entity
  */
 public class Player extends Entity {
     private Bitmap image;
-    private int score;
     private double dya;
     private boolean playing;
     private boolean jumping;
     private long startTime;
+    private boolean queuedJump;
 
+    /**
+     * Player constructor
+     * @param res Bitmap player sprite
+     * @param w int player width
+     * @param h int player height
+     */
     Player(Bitmap res, int w, int h){
+        // Initialise values
         x = 125;
         y = 284;
         dy = 0;
-        score = 0;
         width = w;
         jumping = false;
         height = h;
@@ -35,28 +36,44 @@ public class Player extends Entity {
         playing = true;
     }
 
+    /**
+     * Draw method for the player
+     * @param canvas Canvas
+     */
     public void draw(Canvas canvas){
+        // Draw the player sprite
         canvas.drawBitmap(image, x, y, null);
     }
 
-//    public void update(ArrayList<Entity> entities) {
+    /**
+     * Player update method
+     * @param gravity double strength of gravity
+     * @param floor int floor Y level
+     * @param entities ArrayList<Wall> walls to check for colision with
+     * @return
+     */
     public boolean update(double gravity, int floor, ArrayList<Wall> entities) {
-
-        int base_floor = floor;
-
+        // If the player is playing
         if(playing){
             long elapsed = (System.nanoTime() - startTime / 1000000);
             int ceiling = -500;
             if (elapsed > 100) {
-                score++;
                 startTime = System.nanoTime();
             }
+            // If there's a jump queued, jump
+            if(!jumping && queuedJump){
+                jump();
+            }
 
+            // Iterate through the game objects
             Iterator<Wall> it = entities.iterator();
-
             while(it.hasNext()){
+                // Get the wall object
                 Wall e = it.next();
+                // Update the wall object
                 e.update();
+
+                // Create a rectangle with the X co-ordinates of the player
                 Rect rect = new Rect(x, 0, x+height , 1000);
                 int startY = e.getRectangle().top;
                 int endY = e.getRectangle().bottom;
@@ -71,14 +88,14 @@ public class Player extends Entity {
                             floor = new_floor;
                     }
                     else {
+                        // If the player collides with an object then they are not longer playing
                         if (e.colides(this)) playing = false;
                     }
 
+                    // If the current ceiling isn't the next object that should be the ceiling
                     if(y >= endY && ceiling < endY) {
                         ceiling = endY;
                     }
-
-                    // Do a collision check
                 }
                 else {
                     jumping = true;
@@ -99,7 +116,6 @@ public class Player extends Entity {
                     // Apply new co-ordinates
                     y = new_y;
 
-
                     dya += gravity;
                     // Check if the player has fallen
                     if(y >= floor) {
@@ -111,20 +127,34 @@ public class Player extends Entity {
                 }
             }
         }
-        if(playing == false && y < 480) {
+        // If the player isn't playing and isn't on the ground
+        if(!playing && y < 480) {
+            // Apply gravity
             dya += gravity;
             y += (int) dya * 2;
         }
-        else if (playing == false) {
+        // return false if the player isn't playing
+        else if (!playing) {
             return false;
         }
         return true;
     }
 
+    /**
+     * Make the player jump
+     */
     public void jump(){
+        // If they aren't already jumping
         if(!jumping){
+            queuedJump = false;
+            // Set jumping to true
             jumping = true;
+            // Set the vector
             dya = -14;
+        }
+        // Otherwise queue a jump
+        else {
+            queuedJump = true;
         }
     }
 }

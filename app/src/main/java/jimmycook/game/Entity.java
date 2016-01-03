@@ -1,9 +1,10 @@
 package jimmycook.game;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Rect;
 
+/**
+ * Game entity abstract class
+ */
 public abstract class Entity {
     protected int x;
     protected int y;
@@ -12,6 +13,7 @@ public abstract class Entity {
     protected int height;
     protected int width;
 
+    /** Getters and setters */
     public int getX() {
         return x;
     }
@@ -46,11 +48,6 @@ public abstract class Entity {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public boolean colides(Entity e){
-        if (e.getRectangle().intersect(this.getRectangle())) return true;
-        return false;
     }
 
     public Rect getRectangle(){

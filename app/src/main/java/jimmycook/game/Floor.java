@@ -22,10 +22,6 @@ public class Floor extends Entity {
         return y-h;
     }
 
-    public void setFloorY(int floor_y) {
-        this.floor_y = floor_y;
-    }
-
     public void draw(Canvas canvas) {
         canvas.drawBitmap(image, x, y, null);
     }
